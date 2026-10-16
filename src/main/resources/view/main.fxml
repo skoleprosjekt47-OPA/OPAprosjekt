@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<TabPane xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml"
+         fx:controller="com.booklibrary.controller.MainController"
+         tabClosingPolicy="UNAVAILABLE">
+
+    <Tab text="Books">
+        <BorderPane>
+            <top>
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    <TextField fx:id="searchField" promptText="Search by title..." prefWidth="200"/>
+                    <ComboBox fx:id="writerFilter" promptText="Writer"/>
+                    <ComboBox fx:id="genreFilter" promptText="Genre"/>
+                    <ComboBox fx:id="bookshelfFilter" promptText="Bookshelf"/>
+                    <ComboBox fx:id="statusFilter" promptText="Reading status"/>
+                    <Button text="Search" onAction="#onSearch"/>
+                    <Button text="Clear filters" onAction="#onClearFilters"/>
+                </HBox>
+            </top>
+            <center>
+                <TableView fx:id="bookTable">
+                    <columns>
+                        <TableColumn fx:id="titleColumn" text="Title" prefWidth="220"/>
+                        <TableColumn fx:id="yearColumn" text="Year" prefWidth="70"/>
+                        <TableColumn fx:id="writerColumn" text="Writer" prefWidth="150"/>
+                        <TableColumn fx:id="genreColumn" text="Genre" prefWidth="130"/>
+                        <TableColumn fx:id="bookshelfColumn" text="Bookshelf" prefWidth="150"/>
+                        <TableColumn fx:id="statusColumn" text="Status" prefWidth="120"/>
+                    </columns>
+                </TableView>
+            </center>
+            <bottom>
+                <HBox spacing="8" alignment="CENTER_RIGHT">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    <Label fx:id="statusLabel" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                    <Button text="Add book" onAction="#onAddBook"/>
+                    <Button text="Edit book" onAction="#onEditBook"/>
+                    <Button text="Delete book" onAction="#onDeleteBook"/>
+                </HBox>
+            </bottom>
+        </BorderPane>
+    </Tab>
+
+    <Tab text="Reports">
+        <BorderPane>
+            <center>
+                <VBox spacing="12">
+                    <padding>
+                        <Insets top="16" right="16" bottom="16" left="16"/>
+                    </padding>
+                    <Label fx:id="totalBooksLabel" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                    <Label text="Books by reading status" style="-fx-font-weight: bold;"/>
+                    <ListView fx:id="statusReportList" prefHeight="120"/>
+                    <Label text="Books by genre" style="-fx-font-weight: bold;"/>
+                    <ListView fx:id="genreReportList" prefHeight="120"/>
+                    <Label text="Books by writer" style="-fx-font-weight: bold;"/>
+                    <ListView fx:id="writerReportList" prefHeight="120"/>
+                    <Button text="Refresh report" onAction="#onRefreshReport"/>
+                </VBox>
+            </center>
+        </BorderPane>
+    </Tab>
+
+</TabPane>

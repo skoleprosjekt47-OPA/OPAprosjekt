@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="com.booklibrary.controller.BookFormController"
+          hgap="10" vgap="10">
+
+    <padding>
+        <Insets top="16" right="16" bottom="16" left="16"/>
+    </padding>
+
+    <Label text="Title:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+    <TextField fx:id="titleField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+    <Label text="Release year:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+    <TextField fx:id="yearField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+    <Label text="Writer:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+    <ComboBox fx:id="writerBox" GridPane.rowIndex="2" GridPane.columnIndex="1" maxWidth="Infinity"/>
+
+    <Label text="Genre:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+    <ComboBox fx:id="genreBox" GridPane.rowIndex="3" GridPane.columnIndex="1" maxWidth="Infinity"/>
+
+    <Label text="Bookshelf:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+    <ComboBox fx:id="bookshelfBox" GridPane.rowIndex="4" GridPane.columnIndex="1" maxWidth="Infinity"/>
+
+    <Label text="Reading status:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+    <ComboBox fx:id="statusBox" GridPane.rowIndex="5" GridPane.columnIndex="1" maxWidth="Infinity"/>
+
+    <Label fx:id="errorLabel" style="-fx-text-fill: red;" GridPane.rowIndex="6" GridPane.columnIndex="0"
+           GridPane.columnSpan="2"/>
+
+    <HBox spacing="8" GridPane.rowIndex="7" GridPane.columnIndex="0" GridPane.columnSpan="2">
+        <Button text="Save" onAction="#onSave"/>
+        <Button text="Cancel" onAction="#onCancel"/>
+    </HBox>
+
+</GridPane>
