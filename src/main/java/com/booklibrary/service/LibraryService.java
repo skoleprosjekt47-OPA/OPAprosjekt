@@ -9,6 +9,7 @@ import com.booklibrary.dao.impl.BookshelfDaoImpl;
 import com.booklibrary.dao.impl.GenreDaoImpl;
 import com.booklibrary.dao.impl.WriterDaoImpl;
 import com.booklibrary.model.Book;
+import com.booklibrary.model.CatalogBook;
 import com.booklibrary.model.Bookshelf;
 import com.booklibrary.model.Genre;
 import com.booklibrary.model.ReadingStatus;
@@ -175,6 +176,93 @@ public class LibraryService {
      */
     public Bookshelf addBookshelf(Bookshelf bookshelf) throws SQLException {
         return bookshelfDao.insert(bookshelf);
+    }
+
+    /**
+     * Checks whether the private library already holds a book with the same
+     * title and the same first author as a catalog book.
+     *
+     * @param catalogBook the book found in an external catalog
+     * @return {@code true} if a book with the same title and writer already exists
+     * @throws SQLException if the database cannot be read
+     */
+    public boolean isInLibrary(CatalogBook catalogBook) throws SQLException {
+        String author = catalogBook.firstAuthor();
+        return bookDao.findAll().stream().anyMatch(b ->
+                b.getTitle().equalsIgnoreCase(catalogBook.title())
+                        && (author == null
+                        ? b.getWriter() == null
+                        : b.getWriter() != null && b.getWriter().getName().equalsIgnoreCase(author)));
+    }
+
+    /**
+     * Adds a book found in an external catalog to the private library. The
+     * writer and genre are reused if they exist and created otherwise.
+     *
+     * @param catalogBook the book found in an external catalog
+     * @param bookshelf   the bookshelf the book is placed on
+     * @param status      the reading status to start with
+     * @return the saved book, including its new id
+     * @throws SQLException if the database cannot be read or written
+     */
+    public Book importCatalogBook(CatalogBook catalogBook, Bookshelf bookshelf, ReadingStatus status)
+            throws SQLException {
+        Writer writer = findOrCreateWriter(catalogBook.firstAuthor());
+        Genre genre = findOrCreateGenre(catalogBook.firstSubject());
+        String title = shorten(catalogBook.title(), 255);
+        int year = catalogBook.year() == null ? 0 : catalogBook.year();
+        return bookDao.insert(new Book(title, year, status, writer, genre, bookshelf));
+    }
+
+    /**
+     * Finds a writer by name (ignoring case) or creates it.
+     *
+     * @param name the writer name, may be {@code null}
+     * @return the existing or new writer, or {@code null} if no name was given
+     * @throws SQLException if the database cannot be read or written
+     */
+    private Writer findOrCreateWriter(String name) throws SQLException {
+        if (name == null || name.isBlank()) {
+            return null;
+        }
+        String wanted = shorten(name.trim(), 150);
+        for (Writer existing : writerDao.findAll()) {
+            if (existing.getName().equalsIgnoreCase(wanted)) {
+                return existing;
+            }
+        }
+        return writerDao.insert(new Writer(wanted, null));
+    }
+
+    /**
+     * Finds a genre by name (ignoring case) or creates it.
+     *
+     * @param name the genre name, may be {@code null}
+     * @return the existing or new genre, or {@code null} if no name was given
+     * @throws SQLException if the database cannot be read or written
+     */
+    private Genre findOrCreateGenre(String name) throws SQLException {
+        if (name == null || name.isBlank()) {
+            return null;
+        }
+        String wanted = shorten(name.trim(), 100);
+        for (Genre existing : genreDao.findAll()) {
+            if (existing.getName().equalsIgnoreCase(wanted)) {
+                return existing;
+            }
+        }
+        return genreDao.insert(new Genre(wanted, null));
+    }
+
+    /**
+     * Cuts a text to a maximum length so it fits the database column.
+     *
+     * @param text      the text
+     * @param maxLength the maximum number of characters
+     * @return the text, shortened if it was too long
+     */
+    private static String shorten(String text, int maxLength) {
+        return text.length() <= maxLength ? text : text.substring(0, maxLength);
     }
 
     /**

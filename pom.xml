@@ -28,11 +28,25 @@
             <version>${javafx.version}</version>
         </dependency>
 
+        <!-- Plays the intro video (src/main/resources/video/intro.mp4) -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+
         <!-- MySQL JDBC driver -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <version>8.3.0</version>
+        </dependency>
+
+        <!-- JSON parsing for the catalog search (Open Library, Google Books) -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
         </dependency>
 
         <!-- Testing -->

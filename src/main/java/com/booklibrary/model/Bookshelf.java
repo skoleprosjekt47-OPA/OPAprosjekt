@@ -89,6 +89,33 @@ public class Bookshelf {
      */
     @Override
     public String toString() {
-        return name + " (" + room + ", " + shelfNumber + ")";
+        StringBuilder text = new StringBuilder(name);
+        boolean hasRoom = room != null && !room.isBlank();
+        boolean hasNumber = shelfNumber != null && !shelfNumber.isBlank();
+        if (hasRoom || hasNumber) {
+            text.append(" (").append(hasRoom ? room : "").append(hasRoom && hasNumber ? ", " : "")
+                    .append(hasNumber ? shelfNumber : "").append(')');
+        }
+        return text.toString();
+    }
+
+    /** The name used when the user does not type any bookshelf. */
+    public static final String DEFAULT_NAME = "My bookshelf";
+
+    /**
+     * Finds the bookshelf the user meant by a typed name, or describes a new one to create.
+     *
+     * @param typed    the text the user typed or picked; blank means the default shelf
+     * @param existing the bookshelves that already exist
+     * @return an existing shelf with the same name (ignoring case), or a new shelf with id 0
+     */
+    public static Bookshelf fromName(String typed, java.util.List<Bookshelf> existing) {
+        String wanted = typed == null || typed.isBlank() ? DEFAULT_NAME : typed.trim();
+        for (Bookshelf shelf : existing) {
+            if (shelf.getName() != null && shelf.getName().equalsIgnoreCase(wanted)) {
+                return shelf;
+            }
+        }
+        return new Bookshelf(wanted, null, null);
     }
 }

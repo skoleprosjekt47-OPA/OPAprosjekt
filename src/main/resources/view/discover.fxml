@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.booklibrary.controller.DiscoverController">
+    <top>
+        <VBox spacing="6">
+            <padding>
+                <Insets top="10" right="10" bottom="6" left="10"/>
+            </padding>
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <TextField fx:id="queryField" promptText="Search libraries by title, author or subject..."
+                           HBox.hgrow="ALWAYS" onAction="#onSearch"/>
+                <Button fx:id="searchButton" text="Search" defaultButton="true" onAction="#onSearch"/>
+                <ProgressIndicator fx:id="progress" prefWidth="22" prefHeight="22"/>
+            </HBox>
+            <CheckBox fx:id="freeOnlyBox" text="Free books only (read them in full inside the app)"/>
+            <Label fx:id="statusLabel" wrapText="true"/>
+        </VBox>
+    </top>
+    <center>
+        <SplitPane dividerPositions="0.55">
+            <TableView fx:id="resultTable">
+                <columns>
+                    <TableColumn fx:id="titleColumn" text="Title" prefWidth="230"/>
+                    <TableColumn fx:id="authorColumn" text="Author" prefWidth="150"/>
+                    <TableColumn fx:id="yearColumn" text="Year" prefWidth="55"/>
+                    <TableColumn fx:id="sourceColumn" text="Library" prefWidth="95"/>
+                </columns>
+            </TableView>
+            <VBox spacing="8">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                <HBox spacing="12">
+                    <ImageView fx:id="coverView" fitWidth="110" fitHeight="160" preserveRatio="true"/>
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label fx:id="titleLabel" wrapText="true" styleClass="title-label" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                        <Label fx:id="authorsLabel" wrapText="true"/>
+                        <Label fx:id="metaLabel" wrapText="true" styleClass="muted-label"/>
+                        <Label fx:id="subjectsLabel" wrapText="true"/>
+                    </VBox>
+                </HBox>
+                <TextArea fx:id="descriptionArea" editable="false" wrapText="true" VBox.vgrow="ALWAYS"/>
+                <VBox fx:id="adaptationBox" spacing="4" managed="false" visible="false">
+                    <Label text="Film and series" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="adaptationStatus" wrapText="true" styleClass="muted-label"/>
+                    <VBox fx:id="adaptationList" spacing="4"/>
+                </VBox>
+                <HBox spacing="8" alignment="CENTER_RIGHT">
+                    <Button fx:id="addReadButton" text="Add to library &amp; read" onAction="#onAddAndRead"/>
+                    <Button fx:id="readButton" text="Read now (free)" styleClass="primary-button" onAction="#onReadNow"/>
+                    <Button fx:id="openButton" text="Open in browser" onAction="#onOpenPage"/>
+                    <Button fx:id="addButton" text="Add to my library" onAction="#onAddToLibrary"/>
+                </HBox>
+            </VBox>
+        </SplitPane>
+    </center>
+</BorderPane>

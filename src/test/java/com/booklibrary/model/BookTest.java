@@ -46,4 +46,15 @@ class BookTest {
         Book book = new Book("Dune", 1965, ReadingStatus.READ, null, null, null);
         assertEquals("Dune", book.toString());
     }
+
+    @Test
+    void bookshelfNameIsEnoughAndExistingOnesAreReused() {
+        java.util.List<Bookshelf> shelves = java.util.List.of(new Bookshelf(3, "Study shelf", "Study", "B2"));
+        assertEquals("Study shelf", Bookshelf.fromName("study SHELF ", shelves).getName());
+        assertEquals(3, Bookshelf.fromName("study shelf", shelves).getBookshelfId());
+        assertEquals(0, Bookshelf.fromName("Bedroom", shelves).getBookshelfId());
+        assertEquals("My bookshelf", Bookshelf.fromName("  ", shelves).getName());
+        assertEquals("Bedroom", new Bookshelf("Bedroom", null, null).toString());
+        assertEquals("Study shelf (Study, B2)", shelves.get(0).toString());
+    }
 }

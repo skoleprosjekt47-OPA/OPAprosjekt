@@ -1,0 +1,361 @@
+[
+ {
+  "match": [
+   "the lord of the rings",
+   "the fellowship of the ring"
+  ],
+  "adaptations": [
+   {
+    "title": "The Fellowship of the Ring",
+    "type": "film",
+    "year": 2001
+   },
+   {
+    "title": "The Two Towers",
+    "type": "film",
+    "year": 2002
+   },
+   {
+    "title": "The Return of the King",
+    "type": "film",
+    "year": 2003
+   }
+  ]
+ },
+ {
+  "match": [
+   "the two towers"
+  ],
+  "adaptations": [
+   {
+    "title": "The Two Towers",
+    "type": "film",
+    "year": 2002
+   }
+  ]
+ },
+ {
+  "match": [
+   "the return of the king"
+  ],
+  "adaptations": [
+   {
+    "title": "The Return of the King",
+    "type": "film",
+    "year": 2003
+   }
+  ]
+ },
+ {
+  "match": [
+   "the hobbit"
+  ],
+  "adaptations": [
+   {
+    "title": "An Unexpected Journey",
+    "type": "film",
+    "year": 2012
+   },
+   {
+    "title": "The Desolation of Smaug",
+    "type": "film",
+    "year": 2013
+   },
+   {
+    "title": "The Battle of the Five Armies",
+    "type": "film",
+    "year": 2014
+   }
+  ]
+ },
+ {
+  "match": [
+   "harry potter and the philosopher s stone",
+   "harry potter and the sorcerer s stone"
+  ],
+  "adaptations": [
+   {
+    "title": "Harry Potter and the Philosopher's Stone",
+    "type": "film",
+    "year": 2001
+   }
+  ]
+ },
+ {
+  "match": [
+   "harry potter and the chamber of secrets"
+  ],
+  "adaptations": [
+   {
+    "title": "Harry Potter and the Chamber of Secrets",
+    "type": "film",
+    "year": 2002
+   }
+  ]
+ },
+ {
+  "match": [
+   "harry potter and the prisoner of azkaban"
+  ],
+  "adaptations": [
+   {
+    "title": "Harry Potter and the Prisoner of Azkaban",
+    "type": "film",
+    "year": 2004
+   }
+  ]
+ },
+ {
+  "match": [
+   "harry potter and the goblet of fire"
+  ],
+  "adaptations": [
+   {
+    "title": "Harry Potter and the Goblet of Fire",
+    "type": "film",
+    "year": 2005
+   }
+  ]
+ },
+ {
+  "match": [
+   "harry potter and the order of the phoenix"
+  ],
+  "adaptations": [
+   {
+    "title": "Harry Potter and the Order of the Phoenix",
+    "type": "film",
+    "year": 2007
+   }
+  ]
+ },
+ {
+  "match": [
+   "harry potter and the half blood prince"
+  ],
+  "adaptations": [
+   {
+    "title": "Harry Potter and the Half-Blood Prince",
+    "type": "film",
+    "year": 2009
+   }
+  ]
+ },
+ {
+  "match": [
+   "harry potter and the deathly hallows"
+  ],
+  "adaptations": [
+   {
+    "title": "Harry Potter and the Deathly Hallows",
+    "type": "film",
+    "year": 2010
+   }
+  ]
+ },
+ {
+  "match": [
+   "a game of thrones"
+  ],
+  "adaptations": [
+   {
+    "title": "Game of Thrones",
+    "type": "series",
+    "year": 2011
+   }
+  ]
+ },
+ {
+  "match": [
+   "the hunger games"
+  ],
+  "adaptations": [
+   {
+    "title": "The Hunger Games",
+    "type": "film",
+    "year": 2012
+   }
+  ]
+ },
+ {
+  "match": [
+   "dune"
+  ],
+  "adaptations": [
+   {
+    "title": "Dune",
+    "type": "film",
+    "year": 2021
+   },
+   {
+    "title": "Dune: Part Two",
+    "type": "film",
+    "year": 2024
+   }
+  ]
+ },
+ {
+  "match": [
+   "pride and prejudice"
+  ],
+  "adaptations": [
+   {
+    "title": "Pride & Prejudice",
+    "type": "film",
+    "year": 2005
+   },
+   {
+    "title": "Pride and Prejudice",
+    "type": "series",
+    "year": 1995
+   }
+  ]
+ },
+ {
+  "match": [
+   "the great gatsby"
+  ],
+  "adaptations": [
+   {
+    "title": "The Great Gatsby",
+    "type": "film",
+    "year": 2013
+   }
+  ]
+ },
+ {
+  "match": [
+   "emma"
+  ],
+  "adaptations": [
+   {
+    "title": "Emma.",
+    "type": "film",
+    "year": 2020
+   }
+  ]
+ },
+ {
+  "match": [
+   "little women"
+  ],
+  "adaptations": [
+   {
+    "title": "Little Women",
+    "type": "film",
+    "year": 2019
+   }
+  ]
+ },
+ {
+  "match": [
+   "sherlock holmes"
+  ],
+  "adaptations": [
+   {
+    "title": "Sherlock",
+    "type": "series",
+    "year": 2010
+   }
+  ]
+ },
+ {
+  "match": [
+   "alice s adventures in wonderland",
+   "alice in wonderland"
+  ],
+  "adaptations": [
+   {
+    "title": "Alice in Wonderland",
+    "type": "film",
+    "year": 2010
+   }
+  ]
+ },
+ {
+  "match": [
+   "the chronicles of narnia",
+   "the lion the witch and the wardrobe"
+  ],
+  "adaptations": [
+   {
+    "title": "The Lion, the Witch and the Wardrobe",
+    "type": "film",
+    "year": 2005
+   }
+  ]
+ },
+ {
+  "match": [
+   "the hitchhiker s guide to the galaxy"
+  ],
+  "adaptations": [
+   {
+    "title": "The Hitchhiker's Guide to the Galaxy",
+    "type": "film",
+    "year": 2005
+   }
+  ]
+ },
+ {
+  "match": [
+   "1984",
+   "nineteen eighty four"
+  ],
+  "adaptations": [
+   {
+    "title": "Nineteen Eighty-Four",
+    "type": "film",
+    "year": 1984
+   }
+  ]
+ },
+ {
+  "match": [
+   "frankenstein"
+  ],
+  "adaptations": [
+   {
+    "title": "Frankenstein",
+    "type": "film",
+    "year": 1931
+   }
+  ]
+ },
+ {
+  "match": [
+   "dracula"
+  ],
+  "adaptations": [
+   {
+    "title": "Dracula",
+    "type": "film",
+    "year": 1992
+   }
+  ]
+ },
+ {
+  "match": [
+   "the count of monte cristo"
+  ],
+  "adaptations": [
+   {
+    "title": "The Count of Monte Cristo",
+    "type": "film",
+    "year": 2002
+   }
+  ]
+ },
+ {
+  "match": [
+   "the three musketeers"
+  ],
+  "adaptations": [
+   {
+    "title": "The Three Musketeers",
+    "type": "film",
+    "year": 2011
+   }
+  ]
+ }
+]

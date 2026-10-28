@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.booklibrary.reader.scene.SceneView?>
+<?import com.booklibrary.ui.AnnotatedPageView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.booklibrary.controller.ReaderController">
+
+    <left>
+        <ScrollPane fx:id="leftPanel" fitToWidth="true" hbarPolicy="NEVER" prefWidth="300" minWidth="300" maxWidth="300"
+                    style="-fx-background: rgba(11, 11, 15, 0.88); -fx-background-color: rgba(11, 11, 15, 0.88);">
+            <VBox spacing="0">
+                <TitledPane text="Books" expanded="true" animated="false">
+                    <VBox spacing="8">
+                        <Label text="Free books (Project Gutenberg)" styleClass="muted-label"/>
+                        <HBox spacing="6">
+                            <TextField fx:id="searchField" promptText="Title or author..." HBox.hgrow="ALWAYS"
+                                       onAction="#onSearch"/>
+                            <Button fx:id="searchButton" text="Search" onAction="#onSearch"/>
+                        </HBox>
+                        <ListView fx:id="resultList" prefHeight="110"/>
+                        <HBox spacing="6">
+                            <Button text="Read selected" styleClass="primary-button" onAction="#onOpenSelected"/>
+                            <Button text="Demo story" onAction="#onOpenDemo"/>
+                        </HBox>
+                        <Label fx:id="statusLabel" wrapText="true" styleClass="muted-label"
+                               text="Try the demo story or search."/>
+                    </VBox>
+                </TitledPane>
+
+                <TitledPane text="Read aloud" expanded="true" animated="false">
+                    <VBox spacing="8">
+                        <Label fx:id="speechInfoLabel" wrapText="true" styleClass="muted-label"/>
+                        <Label text="Voice" styleClass="muted-label"/>
+                        <ComboBox fx:id="voiceBox" maxWidth="Infinity" visibleRowCount="12"/>
+                        <HBox spacing="8" alignment="CENTER_LEFT">
+                            <Label text="Speed" styleClass="muted-label"/>
+                            <Label fx:id="speedLabel"/>
+                        </HBox>
+                        <Slider fx:id="speedSlider" min="90" max="320" value="170" blockIncrement="10"/>
+                        <Label text="Use the buttons under the text, or select text and press Read."
+                               wrapText="true" styleClass="muted-label"/>
+                    </VBox>
+                </TitledPane>
+
+                <TitledPane text="Text and comfort" expanded="false" animated="false">
+                    <VBox spacing="8">
+                        <Label text="Font (OpenDyslexic, Lexend or Atkinson Hyperlegible show up if installed)"
+                               wrapText="true" styleClass="muted-label"/>
+                        <ComboBox fx:id="fontBox" maxWidth="Infinity"/>
+                        <Label text="Text size" styleClass="muted-label"/>
+                        <Slider fx:id="sizeSlider" min="14" max="40" value="18"/>
+                        <Label text="Space between lines" styleClass="muted-label"/>
+                        <Slider fx:id="spacingSlider" min="0" max="24" value="5"/>
+                        <CheckBox fx:id="boldBox" text="Bold text"/>
+                        <Label text="Colours" styleClass="muted-label"/>
+                        <ComboBox fx:id="contrastBox" maxWidth="Infinity"/>
+                        <Label text="Background darkness" styleClass="muted-label"/>
+                        <Slider fx:id="darknessSlider" min="0" max="0.95" value="0.45"/>
+                    </VBox>
+                </TitledPane>
+
+                <TitledPane text="Translate book" expanded="false" animated="false">
+                    <VBox spacing="8">
+                        <Label fx:id="translateInfoLabel" wrapText="true" styleClass="muted-label"/>
+                        <Label text="Service" styleClass="muted-label"/>
+                        <ComboBox fx:id="providerBox" maxWidth="Infinity"/>
+                        <Label text="Translate into" styleClass="muted-label"/>
+                        <ComboBox fx:id="languageBox" maxWidth="Infinity" visibleRowCount="12"/>
+                        <Button fx:id="translateButton" text="Translate whole book" styleClass="primary-button"
+                                maxWidth="Infinity" onAction="#onTranslateBook"/>
+                        <ProgressBar fx:id="translateProgress" maxWidth="Infinity" visible="false" managed="false"/>
+                        <Button fx:id="cancelTranslateButton" text="Stop translating" maxWidth="Infinity"
+                                visible="false" managed="false" onAction="#onCancelTranslate"/>
+                        <Button fx:id="viewTranslationButton" text="Show translation" maxWidth="Infinity"
+                                disable="true" onAction="#onToggleTranslation"/>
+                        <Label fx:id="translateStatusLabel" wrapText="true" styleClass="muted-label"/>
+                    </VBox>
+                </TitledPane>
+
+                <TitledPane text="View and music" expanded="false" animated="false">
+                    <VBox spacing="8">
+                        <Label text="View" styleClass="muted-label"/>
+                        <ComboBox fx:id="sceneBox" maxWidth="Infinity" visibleRowCount="14"/>
+                        <Label text="Book type (decides the music style)" styleClass="muted-label"/>
+                        <ComboBox fx:id="typeBox" maxWidth="Infinity"/>
+                        <Label text="Music volume" styleClass="muted-label"/>
+                        <Slider fx:id="volumeSlider" min="0" max="1" value="0.5"/>
+                        <CheckBox fx:id="muteBox" text="Mute music"/>
+                        <CheckBox fx:id="focusBox" text="Focus mode (hide this menu)"/>
+                    </VBox>
+                </TitledPane>
+
+                <TitledPane text="My highlights and comments" expanded="false" animated="false">
+                    <VBox spacing="8">
+                        <Label text="Double-click one to open its page." styleClass="muted-label"/>
+                        <ListView fx:id="notesList" prefHeight="170"/>
+                    </VBox>
+                </TitledPane>
+            </VBox>
+        </ScrollPane>
+    </left>
+
+    <center>
+        <StackPane fx:id="readerPane" focusTraversable="true">
+            <SceneView fx:id="sceneView"/>
+            <Region fx:id="dimLayer" mouseTransparent="true" style="-fx-background-color: black;" opacity="0.45"/>
+            <BorderPane pickOnBounds="false">
+                <center>
+                    <StackPane alignment="CENTER" pickOnBounds="false">
+                        <VBox spacing="10" alignment="TOP_CENTER" prefWidth="560" maxWidth="560"
+                              minHeight="250" maxHeight="640"
+                              style="-fx-background-color: radial-gradient(center 50% 50%, radius 70%, rgba(0,0,0,0.50), rgba(0,0,0,0.0)); -fx-background-radius: 20;">
+                            <padding>
+                                <Insets top="20" right="28" bottom="14" left="28"/>
+                            </padding>
+                            <Label fx:id="bookTitleLabel" wrapText="true" visible="false" managed="false"/>
+                            <AnnotatedPageView fx:id="pageView" VBox.vgrow="ALWAYS"/>
+                            <Label fx:id="pageInfo" visible="false" managed="false"/>
+                        </VBox>
+                    </StackPane>
+                </center>
+                <bottom>
+                    <HBox spacing="8" alignment="CENTER" pickOnBounds="false">
+                        <padding>
+                            <Insets top="6" right="0" bottom="16" left="0"/>
+                        </padding>
+                        <Button fx:id="prevButton" text="&#9664; Page" onAction="#onPrevious"/>
+                        <Button fx:id="prevSentenceButton" text="&#9198;" onAction="#onPreviousSentence"/>
+                        <Button fx:id="readButton" text="&#9654; Read aloud" styleClass="primary-button"
+                                onAction="#onReadToggle"/>
+                        <Button fx:id="nextSentenceButton" text="&#9197;" onAction="#onNextSentence"/>
+                        <Button fx:id="stopButton" text="&#9209;" onAction="#onStopReading"/>
+                        <Label fx:id="moodLabel" style="-fx-text-fill: #d9b45a;"/>
+                        <Button fx:id="nextButton" text="Page &#9654;" onAction="#onNext"/>
+                    </HBox>
+                </bottom>
+            </BorderPane>
+            <Button text="&#9776;  Menu" onAction="#onToggleMenu" StackPane.alignment="TOP_LEFT"
+                    style="-fx-background-color: rgba(11, 11, 15, 0.55); -fx-text-fill: #efe8d8;">
+                <StackPane.margin>
+                    <Insets top="10" left="10"/>
+                </StackPane.margin>
+            </Button>
+        </StackPane>
+    </center>
+</BorderPane>

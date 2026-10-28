@@ -1,0 +1,335 @@
+/* Dark luxury theme for the Private Book Library Manager.
+   Palette: near-black backgrounds, warm gold accents, ivory text. */
+
+.root {
+    -fx-base: #1a1a21;
+    -fx-background: #0e0e13;
+    -fx-control-inner-background: #14141a;
+    -fx-control-inner-background-alt: #181820;
+    -fx-accent: #c9a24b;
+    -fx-focus-color: #c9a24b;
+    -fx-faint-focus-color: rgba(201, 162, 75, 0.15);
+    -fx-text-base-color: #efe8d8;
+    -fx-text-background-color: #efe8d8;
+    -fx-text-inner-color: #efe8d8;
+    -fx-prompt-text-fill: #7d776a;
+    -fx-selection-bar: #4a3b17;
+    -fx-selection-bar-non-focused: #3a2f14;
+    -fx-font-family: "Helvetica Neue", "Segoe UI", Arial, sans-serif;
+    -fx-font-size: 13px;
+    -fx-background-color: #0e0e13;
+}
+
+.label {
+    -fx-text-fill: #efe8d8;
+}
+
+.muted-label {
+    -fx-text-fill: #9a927f;
+}
+
+.title-label {
+    -fx-text-fill: #d9b45a;
+    -fx-font-family: "Georgia", "Times New Roman", serif;
+}
+
+/* ---------- Tabs ---------- */
+
+.tab-pane > .tab-header-area > .tab-header-background {
+    -fx-background-color: rgba(11, 11, 15, 0.85);
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 8 20 8 20;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab > .tab-container > .tab-label {
+    -fx-text-fill: #8d8675;
+    -fx-font-size: 14px;
+    -fx-font-family: "Georgia", "Times New Roman", serif;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab:hover > .tab-container > .tab-label {
+    -fx-text-fill: #d9b45a;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab:selected {
+    -fx-border-color: transparent transparent #c9a24b transparent;
+    -fx-border-width: 0 0 2 0;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab:selected > .tab-container > .tab-label {
+    -fx-text-fill: #d9b45a;
+    -fx-font-weight: bold;
+}
+
+.tab-pane > .tab-content-area {
+    -fx-background-color: transparent;
+}
+
+/* Library photo behind the main window (already darkened in the image file) */
+.app-root {
+    -fx-background-color: #0b0b0f;
+    -fx-background-image: url("/images/background.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+}
+
+.app-root .split-pane {
+    -fx-background-color: transparent;
+}
+
+/* ---------- Buttons ---------- */
+
+.button {
+    -fx-background-color: #23232c;
+    -fx-text-fill: #efe8d8;
+    -fx-background-radius: 6;
+    -fx-border-color: #3a3a46;
+    -fx-border-radius: 6;
+    -fx-padding: 7 16 7 16;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #2c2c37;
+    -fx-border-color: #c9a24b;
+}
+
+.button:pressed {
+    -fx-background-color: #1a1a21;
+}
+
+.button:default,
+.button.primary-button {
+    -fx-background-color: linear-gradient(to bottom, #dcb95f, #b88a2e);
+    -fx-text-fill: #17130a;
+    -fx-font-weight: bold;
+    -fx-border-color: transparent;
+}
+
+.button:default:hover,
+.button.primary-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #ecc96f, #c99a3a);
+}
+
+.button:disabled {
+    -fx-opacity: 0.4;
+}
+
+/* ---------- Inputs ---------- */
+
+.text-field,
+.combo-box-base {
+    -fx-background-color: #14141a;
+    -fx-background-radius: 6;
+    -fx-border-color: #34343f;
+    -fx-border-radius: 6;
+}
+
+.text-field {
+    -fx-padding: 7 10 7 10;
+}
+
+.text-area {
+    -fx-background-color: #14141a;
+    -fx-background-radius: 6;
+    -fx-border-color: #34343f;
+    -fx-border-radius: 6;
+}
+
+.text-area .content {
+    -fx-background-color: #14141a;
+}
+
+.text-field:focused,
+.text-area:focused,
+.combo-box-base:focused {
+    -fx-border-color: #c9a24b;
+}
+
+.combo-box-base > .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.combo-box-base > .arrow-button > .arrow {
+    -fx-background-color: #c9a24b;
+}
+
+.combo-box-popup > .list-view {
+    -fx-background-color: #17171d;
+    -fx-border-color: #34343f;
+}
+
+/* ---------- Lists and tables ---------- */
+
+.list-view {
+    -fx-background-color: #14141a;
+    -fx-border-color: #2a2a33;
+}
+
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #efe8d8;
+}
+
+.list-cell:filled:hover {
+    -fx-background-color: #23232c;
+}
+
+.list-cell:filled:selected {
+    -fx-background-color: #3b2f14;
+    -fx-text-fill: #f5e3ae;
+}
+
+.table-view {
+    -fx-background-color: rgba(20, 20, 26, 0.82);
+    -fx-border-color: #2a2a33;
+    -fx-table-cell-border-color: #22222b;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #0b0b0f;
+}
+
+.table-view .column-header,
+.table-view .filler {
+    -fx-size: 38px;
+    -fx-background-color: #0b0b0f;
+    -fx-border-color: #0b0b0f #2a2a33 #c9a24b #0b0b0f;
+    -fx-border-width: 0 1 1 0;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #d9b45a;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER-LEFT;
+}
+
+.table-row-cell {
+    -fx-background-color: rgba(20, 20, 26, 0.72);
+    -fx-text-background-color: #efe8d8;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: rgba(26, 26, 34, 0.72);
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #23232c;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #3b2f14;
+}
+
+.table-row-cell:selected .table-cell {
+    -fx-text-fill: #f5e3ae;
+}
+
+.table-cell {
+    -fx-text-fill: #efe8d8;
+    -fx-padding: 6 10 6 10;
+}
+
+/* ---------- Layout bits ---------- */
+
+.split-pane {
+    -fx-background-color: #0e0e13;
+}
+
+.split-pane > .split-pane-divider {
+    -fx-background-color: #22222b;
+    -fx-padding: 0 1 0 1;
+}
+
+.scroll-pane,
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar > .track {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar > .thumb {
+    -fx-background-color: #3a3a46;
+    -fx-background-radius: 6;
+}
+
+.scroll-bar > .thumb:hover {
+    -fx-background-color: #c9a24b;
+}
+
+.scroll-bar > .increment-button,
+.scroll-bar > .decrement-button {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+
+.scroll-bar > .increment-button > .increment-arrow,
+.scroll-bar > .decrement-button > .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0;
+}
+
+.tooltip {
+    -fx-background-color: #23232c;
+    -fx-text-fill: #efe8d8;
+    -fx-border-color: #c9a24b;
+}
+
+/* ---------- Dialogs and alerts ---------- */
+
+.dialog-pane {
+    -fx-background-color: #14141a;
+}
+
+.dialog-pane > .header-panel {
+    -fx-background-color: #0b0b0f;
+}
+
+.dialog-pane > .header-panel > .label {
+    -fx-text-fill: #d9b45a;
+    -fx-font-size: 16px;
+    -fx-font-family: "Georgia", "Times New Roman", serif;
+}
+
+.dialog-pane > .content.label {
+    -fx-text-fill: #efe8d8;
+}
+
+.dialog-pane > .button-bar > .container {
+    -fx-background-color: #14141a;
+}
+
+/* ---------- Collapsible sections ---------- */
+
+.titled-pane > .title {
+    -fx-background-color: #14141a;
+    -fx-background-insets: 0;
+    -fx-border-color: #2a2a33;
+    -fx-border-width: 0 0 1 0;
+}
+
+.titled-pane > .title > .text {
+    -fx-fill: #d9b45a;
+    -fx-font-weight: bold;
+}
+
+.titled-pane > .title > .arrow-button > .arrow {
+    -fx-background-color: #c9a24b;
+}
+
+.titled-pane > *.content {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}

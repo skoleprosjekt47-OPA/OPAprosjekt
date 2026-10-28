@@ -1,6 +1,9 @@
 package com.booklibrary.controller;
 
+import com.booklibrary.catalog.CatalogService;
 import com.booklibrary.model.Book;
+import com.booklibrary.model.CatalogBook;
+import com.booklibrary.ui.HoverPreview;
 import com.booklibrary.model.Bookshelf;
 import com.booklibrary.model.Genre;
 import com.booklibrary.model.ReadingStatus;
@@ -15,9 +18,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
@@ -60,7 +69,16 @@ public class MainController {
     @FXML private ListView<String> genreReportList;
     @FXML private ListView<String> writerReportList;
 
+    /** Controller of the included Discover tab; injected by FXML from fx:id="discover". */
+    @FXML private DiscoverController discoverController;
+    @FXML private ReaderController readerController;
+    @FXML private KidsController kidsController;
+    @FXML private TabPane mainTabs;
+
     private final LibraryService libraryService = new LibraryService();
+    private final CatalogService catalogService = new CatalogService();
+    private final HoverPreview<Book> bookPreview = new HoverPreview<>(this::loadBookPreview,
+            book -> book.getTitle() + "|" + (book.getWriter() == null ? "" : book.getWriter().getName()));
 
     /**
      * JavaFX lifecycle method called after the FXML is loaded. Wires the
@@ -70,6 +88,13 @@ public class MainController {
      */
     @FXML
     private void initialize() {
+        bookTable.setRowFactory(table -> {
+            TableRow<Book> row = new TableRow<>();
+            bookPreview.attach(row, row::getItem);
+            ContextMenu menu = buildBookMenu(row);
+            row.emptyProperty().addListener((obs, wasEmpty, isEmpty) -> row.setContextMenu(isEmpty ? null : menu));
+            return row;
+        });
         titleColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(
                 data.getValue().getTitle()));
         yearColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleIntegerProperty(
@@ -87,6 +112,173 @@ public class MainController {
 
         loadFilterOptions();
         refreshTable(safeFindAll());
+
+        discoverController.setOnLibraryChanged(() -> {
+            loadFilterOptions();
+            onSearch();
+        });
+
+        discoverController.setOnReadRequested(book -> {
+            for (Tab tab : mainTabs.getTabs()) {
+                if ("Reading".equals(tab.getText())) {
+                    mainTabs.getSelectionModel().select(tab);
+                }
+            }
+            readerController.openFreeBook(book);
+        });
+
+        // the reading mode plays music and animation only while its tab is visible
+        mainTabs.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
+            readerController.setActive(newTab != null && "Reading".equals(newTab.getText()));
+            kidsController.setActive(newTab != null && "Kids".equals(newTab.getText()));
+        });
+    }
+
+    /**
+     * Builds the right-click menu of a book row: read it, change its reading status, edit or delete it.
+     *
+     * @param row the table row the menu belongs to
+     * @return the menu
+     */
+    private ContextMenu buildBookMenu(TableRow<Book> row) {
+        MenuItem read = new MenuItem("Read in Reading mode");
+        read.setOnAction(event -> readInReadingMode(row.getItem()));
+
+        MenuItem markRead = new MenuItem("Mark as Read");
+        markRead.setOnAction(event -> setStatus(row.getItem(), ReadingStatus.READ));
+        MenuItem markReading = new MenuItem("Mark as Currently reading");
+        markReading.setOnAction(event -> setStatus(row.getItem(), ReadingStatus.READING));
+        MenuItem markUnread = new MenuItem("Mark as Unread");
+        markUnread.setOnAction(event -> setStatus(row.getItem(), ReadingStatus.UNREAD));
+
+        MenuItem edit = new MenuItem("Edit...");
+        edit.setOnAction(event -> {
+            bookTable.getSelectionModel().select(row.getItem());
+            onEditBook();
+        });
+        MenuItem delete = new MenuItem("Delete...");
+        delete.setOnAction(event -> {
+            bookTable.getSelectionModel().select(row.getItem());
+            onDeleteBook();
+        });
+
+        ContextMenu menu = new ContextMenu(read, new SeparatorMenuItem(), markRead, markReading, markUnread,
+                new SeparatorMenuItem(), edit, delete);
+        menu.setOnShowing(event -> {
+            if (row.getItem() != null) {
+                bookTable.getSelectionModel().select(row.getItem());
+            }
+        });
+        return menu;
+    }
+
+    /**
+     * Changes the reading status of a book and refreshes the table.
+     *
+     * @param book   the book to change, ignored if {@code null}
+     * @param status the new reading status
+     */
+    private void setStatus(Book book, ReadingStatus status) {
+        if (book == null) {
+            return;
+        }
+        try {
+            book.setReadingStatus(status);
+            libraryService.updateBook(book);
+            onSearch();
+        } catch (SQLException e) {
+            showError("Could not change the status: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Looks for the full free text of a library book (Project Gutenberg) and opens it in the Reading tab.
+     * Shows a message if no free text exists, since most modern books are still under copyright.
+     *
+     * @param book the book to read, ignored if {@code null}
+     */
+    private void readInReadingMode(Book book) {
+        if (book == null) {
+            return;
+        }
+        String author = book.getWriter() == null ? "" : book.getWriter().getName();
+        javafx.concurrent.Task<CatalogBook> task = new javafx.concurrent.Task<>() {
+            @Override
+            protected CatalogBook call() {
+                for (String query : new String[]{book.getTitle(), (book.getTitle() + " " + author).trim()}) {
+                    for (CatalogBook found : catalogService.searchFree(query).books()) {
+                        if (found.isFreeToRead() && found.title() != null
+                                && found.title().equalsIgnoreCase(book.getTitle())) {
+                            return found;
+                        }
+                    }
+                }
+                return null;
+            }
+        };
+        task.setOnSucceeded(event -> {
+            CatalogBook found = task.getValue();
+            if (found == null) {
+                new Alert(AlertType.INFORMATION, "No free full text was found for \"" + book.getTitle()
+                        + "\". Only books whose copyright has expired can be read in the app.").showAndWait();
+                return;
+            }
+            for (Tab tab : mainTabs.getTabs()) {
+                if ("Reading".equals(tab.getText())) {
+                    mainTabs.getSelectionModel().select(tab);
+                }
+            }
+            readerController.openFreeBook(found);
+        });
+        task.setOnFailed(event -> showError("Could not look for the book: " + task.getException().getMessage()));
+        Thread thread = new Thread(task, "find-free-text");
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+    /**
+     * Finds a cover and a short description for a book in the library by searching the online catalogues.
+     * Runs on a background thread when the mouse rests on a book.
+     *
+     * @param book the book the mouse is over
+     * @return the information for the hover card; never {@code null}
+     */
+    private HoverPreview.Data loadBookPreview(Book book) {
+        String author = book.getWriter() == null ? "" : book.getWriter().getName();
+        String fallbackByline = (author.isBlank() ? "" : author + "  -  ") + book.getReleaseYear();
+        try {
+            List<CatalogBook> found = catalogService.searchQuick((book.getTitle() + " " + author).trim()).books();
+            CatalogBook best = null;
+            for (CatalogBook candidate : found) {
+                boolean sameTitle = candidate.title() != null
+                        && candidate.title().equalsIgnoreCase(book.getTitle());
+                boolean hasCover = candidate.coverUrl() != null;
+                if (sameTitle && hasCover) {
+                    best = candidate;
+                    break;
+                }
+                if (best == null && hasCover) {
+                    best = candidate;
+                }
+            }
+            if (best == null && !found.isEmpty()) {
+                best = found.get(0);
+            }
+            if (best != null) {
+                String description = best.description() == null ? "" : best.description().strip();
+                if (description.length() > 380) {
+                    description = description.substring(0, 380).strip() + "...";
+                }
+                String byline = fallbackByline;
+                if (best.subjects() != null && !best.subjects().isEmpty()) {
+                    byline += "  -  " + best.firstSubject();
+                }
+                return new HoverPreview.Data(book.getTitle(), byline, description, best.coverUrl());
+            }
+        } catch (RuntimeException e) {
+            // no internet or catalogue down: show the basic card below
+        }
+        return new HoverPreview.Data(book.getTitle(), fallbackByline, "", null);
     }
 
     /**
@@ -240,6 +432,9 @@ public class MainController {
 
             Book result = controller.getResult();
             if (result != null) {
+                if (result.getBookshelf() != null && result.getBookshelf().getBookshelfId() == 0) {
+                    result.setBookshelf(libraryService.addBookshelf(result.getBookshelf()));
+                }
                 if (existingBook == null) {
                     libraryService.addBook(result);
                 } else {
