@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.booklibrary.kids.KidsStage?>
+<?import com.booklibrary.kids.StoryText?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.booklibrary.controller.KidsController">
+
+    <top>
+        <HBox spacing="12" alignment="CENTER_LEFT">
+            <padding>
+                <Insets top="10" right="14" bottom="6" left="14"/>
+            </padding>
+            <Label text="Story" styleClass="muted-label"/>
+            <ComboBox fx:id="storyBox" prefWidth="250"/>
+            <CheckBox fx:id="animBox" text="Animations"/>
+            <Label text="Text size" styleClass="muted-label"/>
+            <Slider fx:id="textSlider" min="20" max="44" value="28" prefWidth="140"/>
+            <Label fx:id="summaryLabel" styleClass="muted-label" wrapText="true" HBox.hgrow="ALWAYS"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="4" right="14" bottom="6" left="14"/>
+            </padding>
+            <KidsStage fx:id="stage" VBox.vgrow="ALWAYS" minHeight="220"/>
+            <StackPane style="-fx-background-color: rgba(11, 11, 15, 0.78); -fx-background-radius: 14;"
+                       minHeight="130">
+                <padding>
+                    <Insets top="14" right="22" bottom="14" left="22"/>
+                </padding>
+                <StoryText fx:id="storyText"/>
+            </StackPane>
+        </VBox>
+    </center>
+
+    <bottom>
+        <VBox spacing="8" alignment="CENTER">
+            <padding>
+                <Insets top="4" right="14" bottom="12" left="14"/>
+            </padding>
+            <HBox spacing="10" alignment="CENTER">
+                <Button fx:id="prevButton" text="&#9664; Back" onAction="#onPrevious"/>
+                <Button fx:id="readButton" text="&#9654; Read the story" styleClass="primary-button"
+                        onAction="#onReadToggle"/>
+                <Button fx:id="stopButton" text="&#9209; Stop" onAction="#onStop"/>
+                <Button fx:id="nextButton" text="Next &#9654;" onAction="#onNext"/>
+                <Label fx:id="pageLabel" styleClass="muted-label"/>
+            </HBox>
+            <HBox spacing="10" alignment="CENTER">
+                <Label text="Voice" styleClass="muted-label"/>
+                <ComboBox fx:id="voiceBox" prefWidth="260" visibleRowCount="12"/>
+                <Label text="Speed" styleClass="muted-label"/>
+                <Slider fx:id="speedSlider" min="90" max="260" value="150" prefWidth="140"/>
+                <Label fx:id="speedLabel" styleClass="muted-label"/>
+            </HBox>
+            <Label fx:id="infoLabel" styleClass="muted-label" wrapText="true"
+                   text="Tap the characters to make them move."/>
+        </VBox>
+    </bottom>
+</BorderPane>

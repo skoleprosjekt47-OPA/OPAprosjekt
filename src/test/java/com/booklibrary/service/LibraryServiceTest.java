@@ -6,6 +6,7 @@ import com.booklibrary.fakes.FakeGenreDao;
 import com.booklibrary.fakes.FakeWriterDao;
 import com.booklibrary.model.Book;
 import com.booklibrary.model.Bookshelf;
+import com.booklibrary.model.CatalogBook;
 import com.booklibrary.model.Genre;
 import com.booklibrary.model.ReadingStatus;
 import com.booklibrary.model.Writer;
@@ -117,5 +118,55 @@ class LibraryServiceTest {
                 .filter(b -> b.getBookId() == 1)
                 .findFirst()
                 .orElse(null));
+    }
+
+    private static CatalogBook catalogBook(String author, String subject, Integer year) {
+        return new CatalogBook("Open Library", "/works/X", "Brave New World",
+                author == null ? List.of() : List.of(author), year, null,
+                subject == null ? List.of() : List.of(subject), null, null, null, null, null);
+    }
+
+    @Test
+    void importCatalogBookReusesExistingWriterAndGenre() throws SQLException {
+        Book saved = service.importCatalogBook(catalogBook("george orwell", "dystopia", 1932),
+                livingRoom, ReadingStatus.UNREAD);
+
+        assertEquals("Brave New World", saved.getTitle());
+        assertEquals(1932, saved.getReleaseYear());
+        assertEquals(2, saved.getWriter().getWriterId());
+        assertEquals(2, saved.getGenre().getGenreId());
+        assertEquals(2, service.getAllWriters().size());
+        assertEquals(2, service.getAllGenres().size());
+    }
+
+    @Test
+    void importCatalogBookCreatesNewWriterAndGenre() throws SQLException {
+        Book saved = service.importCatalogBook(catalogBook("Aldous Huxley", "Science fiction", null),
+                livingRoom, ReadingStatus.READING);
+
+        assertEquals("Aldous Huxley", saved.getWriter().getName());
+        assertEquals("Science fiction", saved.getGenre().getName());
+        assertEquals(0, saved.getReleaseYear());
+        assertEquals(3, service.getAllWriters().size());
+        assertEquals(3, service.getAllGenres().size());
+    }
+
+    @Test
+    void importCatalogBookWithoutAuthorOrSubjectLeavesThemEmpty() throws SQLException {
+        Book saved = service.importCatalogBook(catalogBook(null, null, 1932), livingRoom, ReadingStatus.UNREAD);
+
+        assertNull(saved.getWriter());
+        assertNull(saved.getGenre());
+    }
+
+    @Test
+    void isInLibraryMatchesTitleAndAuthorIgnoringCase() throws SQLException {
+        CatalogBook inLibrary = new CatalogBook("Open Library", "x", "ANIMAL FARM", List.of("George Orwell"),
+                1945, null, List.of(), null, null, null, null, null);
+        CatalogBook otherAuthor = new CatalogBook("Open Library", "x", "Animal Farm", List.of("Someone Else"),
+                1945, null, List.of(), null, null, null, null, null);
+
+        assertTrue(service.isInLibrary(inLibrary));
+        assertTrue(!service.isInLibrary(otherAuthor));
     }
 }

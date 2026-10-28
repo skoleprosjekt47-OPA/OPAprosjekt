@@ -7,6 +7,7 @@
 <TabPane xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml"
          fx:controller="com.booklibrary.controller.MainController"
+         styleClass="app-root" fx:id="mainTabs"
          tabClosingPolicy="UNAVAILABLE">
 
     <Tab text="Books">
@@ -43,12 +44,30 @@
                         <Insets top="10" right="10" bottom="10" left="10"/>
                     </padding>
                     <Label fx:id="statusLabel" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
-                    <Button text="Add book" onAction="#onAddBook"/>
+                    <Button text="Add book" styleClass="primary-button" onAction="#onAddBook"/>
                     <Button text="Edit book" onAction="#onEditBook"/>
                     <Button text="Delete book" onAction="#onDeleteBook"/>
                 </HBox>
             </bottom>
         </BorderPane>
+    </Tab>
+
+    <Tab text="Discover">
+        <content>
+            <fx:include fx:id="discover" source="discover.fxml"/>
+        </content>
+    </Tab>
+
+    <Tab text="Reading">
+        <content>
+            <fx:include fx:id="reader" source="reader.fxml"/>
+        </content>
+    </Tab>
+
+    <Tab text="Kids">
+        <content>
+            <fx:include fx:id="kids" source="kids.fxml"/>
+        </content>
     </Tab>
 
     <Tab text="Reports">

@@ -38,6 +38,7 @@ public class BookFormController {
 
     private int editingBookId = 0;
     private boolean saved = false;
+    private List<Bookshelf> knownShelves = List.of();
 
     /**
      * Populates the dropdowns with the available writers, genres and
@@ -50,6 +51,20 @@ public class BookFormController {
         writerBox.setItems(FXCollections.observableArrayList(writers));
         genreBox.setItems(FXCollections.observableArrayList(genres));
         bookshelfBox.setItems(FXCollections.observableArrayList(bookshelves));
+        knownShelves = List.copyOf(bookshelves);
+        bookshelfBox.setEditable(true);
+        bookshelfBox.setPromptText("Pick one or type a new name");
+        bookshelfBox.setConverter(new javafx.util.StringConverter<>() {
+            @Override
+            public String toString(Bookshelf shelf) {
+                return shelf == null ? "" : shelf.getName();
+            }
+
+            @Override
+            public Bookshelf fromString(String text) {
+                return Bookshelf.fromName(text, knownShelves);
+            }
+        });
         statusBox.setItems(FXCollections.observableArrayList(ReadingStatus.values()));
 
         if (existingBook != null) {
@@ -93,7 +108,8 @@ public class BookFormController {
         }
 
         result = new Book(editingBookId, title.trim(), year, statusBox.getValue(),
-                writerBox.getValue(), genreBox.getValue(), bookshelfBox.getValue());
+                writerBox.getValue(), genreBox.getValue(),
+                Bookshelf.fromName(bookshelfBox.getEditor().getText(), knownShelves));
         saved = true;
         closeWindow();
     }
