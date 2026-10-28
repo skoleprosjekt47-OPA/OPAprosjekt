@@ -497,15 +497,16 @@ public class ReaderController {
     // ------------------------------------------------------------------ translate the whole book
 
     private void setupTranslation() {
-        List<TranslationProvider> usable = TranslationProviders.configured(System::getenv, new JdkJsonPoster());
+        List<TranslationProvider> usable = TranslationProviders.configured(com.booklibrary.translate.ApiKeys::get, new JdkJsonPoster());
         providerBox.setItems(FXCollections.observableArrayList(usable));
         languageBox.setItems(FXCollections.observableArrayList(Languages.all()));
         languageBox.setValue(Languages.byCode("nb"));
         languageBox.valueProperty().addListener((obs, oldValue, value) -> updateTranslationAvailability());
         providerBox.valueProperty().addListener((obs, oldValue, value) -> updateTranslationAvailability());
         if (usable.isEmpty()) {
-            translateInfoLabel.setText("No translation service is set up yet. Set one of these environment variables "
-                    + "and start the app again: GEMINI_API_KEY (AI, has a free plan), ANTHROPIC_API_KEY (AI, paid), "
+            translateInfoLabel.setText("No translation service is set up yet. Put one of these in an environment variable "
+                    + "or in the file keys.properties (see keys.properties.example) and start the app again: "
+                    + "GEMINI_API_KEY (AI, has a free plan), ANTHROPIC_API_KEY (AI, paid), "
                     + "DEEPL_API_KEY, or LIBRETRANSLATE_URL. The app never saves your key.");
             providerBox.setDisable(true);
             translateButton.setDisable(true);

@@ -1,0 +1,9 @@
+# Copy this file to "keys.properties" (same folder as pom.xml) and fill in the services you want to use.
+# keys.properties is ignored by git, so the key is never committed. Do not put real keys in this example file.
+# The environment variable of the same name is used first if it is set.
+
+GEMINI_API_KEY=
+#ANTHROPIC_API_KEY=
+#DEEPL_API_KEY=
+#LIBRETRANSLATE_URL=
+#LIBRETRANSLATE_API_KEY=
