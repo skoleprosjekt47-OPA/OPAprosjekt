@@ -1,5 +1,6 @@
 package com.booklibrary;
 
+import com.booklibrary.ui.GuideAssistant;
 import com.booklibrary.ui.IntroScreen;
 import com.booklibrary.ui.ThemeManager;
 import com.booklibrary.ui.VideoIntro;
@@ -9,6 +10,8 @@ import javafx.application.HostServices;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TabPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -97,8 +100,16 @@ public class MainApp extends Application {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/main.fxml"));
             Parent root = loader.load();
-            Scene scene = new Scene(root, 1000, 650, Color.web("#0e0e13"));
+            StackPane host = new StackPane(root);
+            GuideAssistant guide = createGuide(root, host);
+            Scene scene = new Scene(host, 1000, 650, Color.web("#0e0e13"));
             stage.setScene(scene);
+            if (guide != null) {
+                stage.setOnHidden(event -> guide.shutdown());
+                if (System.getProperty("booklibrary.skipGuide") == null) {
+                    guide.startIfEnabled();
+                }
+            }
             if (fadeIn) {
                 root.setOpacity(0);
                 FadeTransition fade = new FadeTransition(Duration.millis(600), root);
@@ -108,6 +119,25 @@ public class MainApp extends Application {
         } catch (IOException e) {
             throw new IllegalStateException("Could not load the main window", e);
         }
+    }
+
+    /**
+     * Creates the assistant that guides new users. If it cannot be created (for example the picture is
+     * missing) the application simply starts without it.
+     *
+     * @param root the main view, which must be the tab pane
+     * @param host the stack that will hold the main view and the assistant
+     * @return the assistant, or {@code null} if it could not be created
+     */
+    private GuideAssistant createGuide(Parent root, StackPane host) {
+        if (root instanceof TabPane tabs) {
+            try {
+                return new GuideAssistant(tabs, host);
+            } catch (RuntimeException e) {
+                return null;
+            }
+        }
+        return null;
     }
 
     /**
