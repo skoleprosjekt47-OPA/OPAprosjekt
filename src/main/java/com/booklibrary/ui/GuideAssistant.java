@@ -49,18 +49,17 @@ public class GuideAssistant {
     private static final String PREF_DISABLED = "guideDisabled";
     private static final int WORDS_PER_MINUTE = 175;
 
-    /** The animation sheet: 79 pictures of 200 x 330 pixels, 10 in each row, played at 10 pictures a second. */
+    /** The animation sheet: 79 pictures of 181 x 330 pixels, 10 in each row, played at 10 pictures a second. */
     private static final String SHEET = "/images/assistant_sheet.png";
-    private static final int FRAME_WIDTH = 200;
+    private static final int FRAME_WIDTH = 181;
     private static final int FRAME_HEIGHT = 330;
     private static final int COLUMNS = 10;
     private static final int FRAMES = 79;
     private static final int FRAME_MILLIS = 100;
 
-    /** Voices of men, so the assistant sounds like the character. The first installed one in the engine's list is used. */
-    private static final List<String> MALE_NAMES = List.of("Evan", "Nathan", "Daniel", "Alex", "Tom", "Oliver",
-            "Aaron", "Lee", "Arthur", "Gordon", "Rishi", "David", "Mark", "George", "James", "Guy", "Ryan",
-            "Christopher", "Eric");
+    /** Voices of women, so the assistant sounds like the character. The first installed one in the engine's list is used. */
+    private static final List<String> FEMALE_NAMES = List.of("Samantha", "Ava", "Allison", "Susan", "Zoe", "Karen",
+            "Moira", "Tessa", "Serena", "Victoria", "Fiona", "Zira", "Hazel", "Jenny", "Aria", "Emma");
 
     private final TabPane tabs;
     private final List<GuideSteps.Step> steps = GuideSteps.all();
@@ -172,6 +171,7 @@ public class GuideAssistant {
         index = 0;
         panel.setVisible(true);
         bob.play();
+        startTalking();
         showStep(null);
     }
 
@@ -214,10 +214,6 @@ public class GuideAssistant {
         position = (position + 1) % cycle;
         int frame = position <= FRAMES - 1 ? FRAMES - 1 - position : position - (FRAMES - 1);
         showFrame(frame);
-        if (stopRequested && position == 0) {
-            talk.stop();
-            stopRequested = false;
-        }
     }
 
     private void startTalking() {
@@ -229,9 +225,7 @@ public class GuideAssistant {
 
     /** Lets the movement finish its round and stand still. */
     private void stopTalking() {
-        if (talk.getStatus() == Animation.Status.RUNNING) {
-            stopRequested = true;
-        }
+        // The movement keeps looping, so the character stays alive and never freezes.
     }
 
     private void close() {
@@ -295,8 +289,8 @@ public class GuideAssistant {
     }
 
     /**
-     * Picks a man's English voice. The speech engines list the best sounding voices first, so the first
-     * English voice with a man's name is used. If there is none, the first English voice is used.
+     * Picks a woman's English voice. The speech engines list the best sounding voices first, so the first
+     * English voice with a woman's name is used. If there is none, the first English voice is used.
      */
     private static Voice chooseVoice(SpeechEngine engine) {
         Voice firstEnglish = null;
@@ -307,7 +301,7 @@ public class GuideAssistant {
             if (firstEnglish == null) {
                 firstEnglish = candidate;
             }
-            for (String name : MALE_NAMES) {
+            for (String name : FEMALE_NAMES) {
                 if (candidate.name().contains(name)) {
                     return candidate;
                 }
