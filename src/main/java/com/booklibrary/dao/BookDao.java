@@ -41,7 +41,7 @@ public interface BookDao {
      * {@code null} or blank value for a given filter means "do not
      * filter by this field".
      *
-     * @param titleContains text that must appear in the title (case-insensitive), or null
+     * @param titleContains text that must appear in the title or in the writer's name (case-insensitive), or null
      * @param writerId      restrict to this writer's id, or null for any writer
      * @param genreId       restrict to this genre's id, or null for any genre
      * @param bookshelfId   restrict to this bookshelf's id, or null for any bookshelf

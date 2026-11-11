@@ -85,7 +85,7 @@ public class BookDaoImpl implements BookDao {
      * for each non-null/non-blank filter, then runs it and maps every row to
      * a fully populated {@link Book}.
      *
-     * @param titleContains text that must appear in the title (case-insensitive), or null
+     * @param titleContains text that must appear in the title or in the writer's name (case-insensitive), or null
      * @param writerId      restrict to this writer's id, or null for any writer
      * @param genreId       restrict to this genre's id, or null for any genre
      * @param bookshelfId   restrict to this bookshelf's id, or null for any bookshelf
@@ -100,8 +100,10 @@ public class BookDaoImpl implements BookDao {
         List<Object> params = new ArrayList<>();
 
         if (titleContains != null && !titleContains.isBlank()) {
-            sql.append(" AND LOWER(b.title) LIKE ?");
-            params.add("%" + titleContains.toLowerCase() + "%");
+            sql.append(" AND (LOWER(b.title) LIKE ? OR LOWER(w.name) LIKE ?)");
+            String pattern = "%" + titleContains.toLowerCase() + "%";
+            params.add(pattern);
+            params.add(pattern);
         }
         if (writerId != null) {
             sql.append(" AND b.writer_id = ?");

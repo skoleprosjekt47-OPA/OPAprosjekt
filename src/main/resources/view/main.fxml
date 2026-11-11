@@ -13,18 +13,18 @@
     <Tab text="Books">
         <BorderPane>
             <top>
-                <HBox spacing="8" alignment="CENTER_LEFT">
+                <FlowPane hgap="8" vgap="8" alignment="CENTER_LEFT">
                     <padding>
                         <Insets top="10" right="10" bottom="10" left="10"/>
                     </padding>
-                    <TextField fx:id="searchField" promptText="Search by title..." prefWidth="200"/>
+                    <TextField fx:id="searchField" promptText="Search by title or writer..." prefWidth="240"/>
                     <ComboBox fx:id="writerFilter" promptText="Writer"/>
                     <ComboBox fx:id="genreFilter" promptText="Genre"/>
                     <ComboBox fx:id="bookshelfFilter" promptText="Bookshelf"/>
                     <ComboBox fx:id="statusFilter" promptText="Reading status"/>
                     <Button text="Search" onAction="#onSearch"/>
                     <Button text="Clear filters" onAction="#onClearFilters"/>
-                </HBox>
+                </FlowPane>
             </top>
             <center>
                 <TableView fx:id="bookTable">
@@ -52,23 +52,8 @@
         </BorderPane>
     </Tab>
 
-    <Tab text="Discover">
-        <content>
-            <fx:include fx:id="discover" source="discover.fxml"/>
-        </content>
-    </Tab>
 
-    <Tab text="Reading">
-        <content>
-            <fx:include fx:id="reader" source="reader.fxml"/>
-        </content>
-    </Tab>
 
-    <Tab text="Kids">
-        <content>
-            <fx:include fx:id="kids" source="kids.fxml"/>
-        </content>
-    </Tab>
 
     <Tab text="Reports">
         <BorderPane>

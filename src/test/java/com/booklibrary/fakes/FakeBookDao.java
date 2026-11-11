@@ -40,7 +40,9 @@ public class FakeBookDao implements BookDao {
                               Integer bookshelfId, String readingStatus) {
         return books.stream()
                 .filter(b -> titleContains == null || titleContains.isBlank()
-                        || b.getTitle().toLowerCase().contains(titleContains.toLowerCase()))
+                        || b.getTitle().toLowerCase().contains(titleContains.toLowerCase())
+                        || (b.getWriter() != null
+                        && b.getWriter().getName().toLowerCase().contains(titleContains.toLowerCase())))
                 .filter(b -> writerId == null || (b.getWriter() != null && b.getWriter().getWriterId() == writerId))
                 .filter(b -> genreId == null || (b.getGenre() != null && b.getGenre().getGenreId() == genreId))
                 .filter(b -> bookshelfId == null || (b.getBookshelf() != null && b.getBookshelf().getBookshelfId() == bookshelfId))
