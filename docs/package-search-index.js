@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html","k":"18"},{"l":"com.booklibrary"},{"l":"com.booklibrary.controller"},{"l":"com.booklibrary.dao"},{"l":"com.booklibrary.dao.impl"},{"l":"com.booklibrary.model"},{"l":"com.booklibrary.service"},{"l":"com.booklibrary.ui"},{"l":"com.booklibrary.util"}];updateSearchResults();
