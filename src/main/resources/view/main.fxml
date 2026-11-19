@@ -38,6 +38,15 @@
                     </columns>
                 </TableView>
             </center>
+            <right>
+                <VBox spacing="6" prefWidth="230">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    <Label text="Book details" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="detailLabel" wrapText="true" text="Select a book to see its details."/>
+                </VBox>
+            </right>
             <bottom>
                 <HBox spacing="8" alignment="CENTER_RIGHT">
                     <padding>
@@ -47,6 +56,7 @@
                     <Button text="Add book" styleClass="primary-button" onAction="#onAddBook"/>
                     <Button text="Edit book" onAction="#onEditBook"/>
                     <Button text="Delete book" onAction="#onDeleteBook"/>
+                    <Button text="Export CSV..." onAction="#onExportCsv"/>
                 </HBox>
             </bottom>
         </BorderPane>
@@ -54,6 +64,10 @@
 
 
 
+
+    <Tab text="Manage">
+        <fx:include fx:id="manage" source="manage.fxml"/>
+    </Tab>
 
     <Tab text="Reports">
         <BorderPane>

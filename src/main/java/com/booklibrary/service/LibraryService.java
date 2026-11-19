@@ -14,6 +14,10 @@ import com.booklibrary.model.Genre;
 import com.booklibrary.model.ReadingStatus;
 import com.booklibrary.model.Writer;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -200,6 +204,109 @@ public class LibraryService {
                 .collect(Collectors.groupingBy(b -> b.getWriter().getName(), Collectors.counting()));
 
         return new LibrarySummary(books.size(), byStatus, byGenre, byWriter);
+    }
+
+    /**
+     * Updates an existing writer.
+     *
+     * @param writer the writer to update, identified by its id
+     * @throws SQLException if the database update fails
+     */
+    public void updateWriter(Writer writer) throws SQLException {
+        writerDao.update(writer);
+    }
+
+    /**
+     * Deletes a writer. Books by this writer stay in the library with no writer
+     * (the database uses ON DELETE SET NULL).
+     *
+     * @param writerId id of the writer to delete
+     * @throws SQLException if the database delete fails
+     */
+    public void deleteWriter(int writerId) throws SQLException {
+        writerDao.delete(writerId);
+    }
+
+    /**
+     * Updates an existing genre.
+     *
+     * @param genre the genre to update, identified by its id
+     * @throws SQLException if the database update fails
+     */
+    public void updateGenre(Genre genre) throws SQLException {
+        genreDao.update(genre);
+    }
+
+    /**
+     * Deletes a genre. Books in this genre stay in the library with no genre.
+     *
+     * @param genreId id of the genre to delete
+     * @throws SQLException if the database delete fails
+     */
+    public void deleteGenre(int genreId) throws SQLException {
+        genreDao.delete(genreId);
+    }
+
+    /**
+     * Updates an existing bookshelf.
+     *
+     * @param bookshelf the bookshelf to update, identified by its id
+     * @throws SQLException if the database update fails
+     */
+    public void updateBookshelf(Bookshelf bookshelf) throws SQLException {
+        bookshelfDao.update(bookshelf);
+    }
+
+    /**
+     * Deletes a bookshelf. Books on this shelf stay in the library with no shelf.
+     *
+     * @param bookshelfId id of the bookshelf to delete
+     * @throws SQLException if the database delete fails
+     */
+    public void deleteBookshelf(int bookshelfId) throws SQLException {
+        bookshelfDao.delete(bookshelfId);
+    }
+
+    /**
+     * Turns a list of books into CSV text with a header row. Values that contain
+     * a comma, a quote or a line break are wrapped in quotes.
+     *
+     * @param books the books to convert
+     * @return the CSV text
+     */
+    public static String toCsv(List<Book> books) {
+        StringBuilder csv = new StringBuilder("Title,Year,Writer,Genre,Bookshelf,Status\n");
+        for (Book book : books) {
+            csv.append(csvValue(book.getTitle())).append(',')
+               .append(book.getReleaseYear()).append(',')
+               .append(csvValue(book.getWriter() != null ? book.getWriter().getName() : "")).append(',')
+               .append(csvValue(book.getGenre() != null ? book.getGenre().getName() : "")).append(',')
+               .append(csvValue(book.getBookshelf() != null ? book.getBookshelf().getName() : "")).append(',')
+               .append(csvValue(book.getReadingStatus().getDisplayLabel())).append('\n');
+        }
+        return csv.toString();
+    }
+
+    private static String csvValue(String value) {
+        String text = value == null ? "" : value;
+        if (text.contains(",") || text.contains("\"") || text.contains("\n")) {
+            return "\"" + text.replace("\"", "\"\"") + "\"";
+        }
+        return text;
+    }
+
+    /**
+     * Writes every book in the library to a CSV file (UTF-8).
+     *
+     * @param file the file to write; it is created or overwritten
+     * @return the number of books written
+     * @throws SQLException if the books cannot be read from the database
+     * @throws IOException  if the file cannot be written
+     */
+    public int exportBooksToCsv(Path file) throws SQLException, IOException {
+        List<Book> books = bookDao.findAll();
+        Files.writeString(file, toCsv(books), StandardCharsets.UTF_8);
+        return books.size();
     }
 
     /**

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.booklibrary.controller.ManageController"
+      spacing="16">
+    <padding>
+        <Insets top="16" right="16" bottom="16" left="16"/>
+    </padding>
+
+    <VBox spacing="8" HBox.hgrow="ALWAYS">
+        <Label text="Writers" style="-fx-font-weight: bold;"/>
+        <ListView fx:id="writerList" VBox.vgrow="ALWAYS"/>
+        <HBox spacing="8">
+            <Button text="Add" styleClass="primary-button" onAction="#onAddWriter"/>
+            <Button text="Edit" onAction="#onEditWriter"/>
+            <Button text="Delete" onAction="#onDeleteWriter"/>
+        </HBox>
+    </VBox>
+
+    <VBox spacing="8" HBox.hgrow="ALWAYS">
+        <Label text="Genres" style="-fx-font-weight: bold;"/>
+        <ListView fx:id="genreList" VBox.vgrow="ALWAYS"/>
+        <HBox spacing="8">
+            <Button text="Add" styleClass="primary-button" onAction="#onAddGenre"/>
+            <Button text="Edit" onAction="#onEditGenre"/>
+            <Button text="Delete" onAction="#onDeleteGenre"/>
+        </HBox>
+    </VBox>
+
+    <VBox spacing="8" HBox.hgrow="ALWAYS">
+        <Label text="Bookshelves" style="-fx-font-weight: bold;"/>
+        <ListView fx:id="bookshelfList" VBox.vgrow="ALWAYS"/>
+        <HBox spacing="8">
+            <Button text="Add" styleClass="primary-button" onAction="#onAddBookshelf"/>
+            <Button text="Edit" onAction="#onEditBookshelf"/>
+            <Button text="Delete" onAction="#onDeleteBookshelf"/>
+        </HBox>
+    </VBox>
+</HBox>

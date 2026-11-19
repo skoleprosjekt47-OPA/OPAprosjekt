@@ -24,9 +24,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +61,10 @@ public class MainController {
     @FXML private TableColumn<Book, String> statusColumn;
 
     @FXML private Label statusLabel;
+    @FXML private Label detailLabel;
+
+    // controller of the included manage.fxml (the field name is the fx:id "manage" + "Controller")
+    @FXML private ManageController manageController;
 
     @FXML private Label totalBooksLabel;
     @FXML private ListView<String> statusReportList;
@@ -106,6 +113,63 @@ public class MainController {
         genreFilter.valueProperty().addListener((obs, oldValue, newValue) -> onSearch());
         bookshelfFilter.valueProperty().addListener((obs, oldValue, newValue) -> onSearch());
         statusFilter.valueProperty().addListener((obs, oldValue, newValue) -> onSearch());
+
+        // show the details of the selected book in the panel on the right
+        bookTable.getSelectionModel().selectedItemProperty()
+                .addListener((obs, oldBook, newBook) -> showDetails(newBook));
+
+        // when a writer, genre or bookshelf is changed in the Manage tab, refresh the Books tab
+        if (manageController != null) {
+            manageController.setOnChange(() -> {
+                loadFilterOptions();
+                onSearch();
+            });
+        }
+    }
+
+    /**
+     * Shows all the details of one book in the detail panel, or a hint if no book is selected.
+     *
+     * @param book the selected book, or {@code null}
+     */
+    private void showDetails(Book book) {
+        if (book == null) {
+            detailLabel.setText("Select a book to see its details.");
+            return;
+        }
+        detailLabel.setText("Title: " + book.getTitle()
+                + "\nYear: " + book.getReleaseYear()
+                + "\nWriter: " + (book.getWriter() != null ? book.getWriter().getName() : "-")
+                + "\nNationality: " + (book.getWriter() != null && book.getWriter().getNationality() != null
+                        ? book.getWriter().getNationality() : "-")
+                + "\nGenre: " + (book.getGenre() != null ? book.getGenre().getName() : "-")
+                + "\nBookshelf: " + (book.getBookshelf() != null ? book.getBookshelf().getName() : "-")
+                + "\nRoom: " + (book.getBookshelf() != null && book.getBookshelf().getRoom() != null
+                        ? book.getBookshelf().getRoom() : "-")
+                + "\nShelf number: " + (book.getBookshelf() != null && book.getBookshelf().getShelfNumber() != null
+                        ? book.getBookshelf().getShelfNumber() : "-")
+                + "\nStatus: " + book.getReadingStatus().getDisplayLabel());
+    }
+
+    /**
+     * Handles the Export CSV button: asks where to save, then writes all books to a CSV file.
+     */
+    @FXML
+    private void onExportCsv() {
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Export books to CSV");
+        chooser.setInitialFileName("books.csv");
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV files", "*.csv"));
+        File file = chooser.showSaveDialog(bookTable.getScene().getWindow());
+        if (file == null) {
+            return;
+        }
+        try {
+            int count = libraryService.exportBooksToCsv(file.toPath());
+            statusLabel.setText("Exported " + count + " book(s) to " + file.getName());
+        } catch (SQLException | IOException e) {
+            showError("Could not export the books: " + e.getMessage());
+        }
     }
 
     /**
